@@ -10,6 +10,16 @@ A reusable Codex skill for smooth biological growth animations: specimen-style H
 
 ## 安装到 Codex
 
+### 使用 npx（推荐）
+
+```sh
+npx skills add wifecooky/bio-growth-animation -a codex -g -y
+```
+
+`-a codex` 指定 Codex，`-g` 安装到用户级目录，供各项目使用，`-y` 跳过确认提示。需要可用的 Node.js 和 npx；完整参数见 [Skills CLI 文档](https://github.com/vercel-labs/skills/blob/main/docs/commands.md)。
+
+### 手动安装
+
 ```sh
 git clone https://github.com/wifecooky/bio-growth-animation.git \
   "${CODEX_HOME:-$HOME/.codex}/skills/bio-growth-animation"
