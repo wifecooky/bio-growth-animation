@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=900,height=1200" />
+<title>@@TITLE@@</title>
+<script src="assets/gsap.min.js"></script>
+<script src="assets/growth-morph.js"></script>
+<style>
+@font-face{font-family:ArchiveSans;src:url('assets/fonts/Inter-400.woff2') format('woff2');font-weight:400}
+@font-face{font-family:ArchiveSans;src:url('assets/fonts/Inter-700.woff2') format('woff2');font-weight:700}
+@font-face{font-family:ArchiveMono;src:url('assets/fonts/JetBrainsMono-400.woff2') format('woff2');font-weight:400}
+@font-face{font-family:ArchiveChinese;src:url('assets/fonts/NotoSansCJK.woff2') format('woff2');font-weight:400}
+:root{--bg:#050708;--ink:#e8e9e4;--muted:#8f9fa6;--rule:#35505b;--accent:#e4a05b;--cold:#a5c6d2}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg)}
+#stage{position:relative;width:100%;height:100%;overflow:hidden;color:var(--ink);font-family:ArchiveSans,ArchiveChinese,sans-serif}
+.clip{position:absolute;inset:0}.backdrop{position:absolute;inset:0;background:radial-gradient(ellipse at 57% 58%,#0c1417 0%,#080d0f 28%,var(--bg) 65%)}
+.grid{position:absolute;left:278px;top:252px;width:428px;height:694px;background-image:linear-gradient(#45616a0d 1px,transparent 1px),linear-gradient(90deg,#45616a0d 1px,transparent 1px);background-size:48px 48px;opacity:.5}
+.frame-content{height:100%;width:100%;padding:52px;display:flex;flex-direction:column;position:relative}
+.header{height:186px;flex-shrink:0;display:flex;flex-direction:column;justify-content:space-between}
+.meta{display:flex;justify-content:space-between;align-items:center;font-family:ArchiveMono,monospace;font-size:13px;letter-spacing:.15em;color:var(--muted)}
+.meta-left{display:flex;align-items:center;gap:10px}.live-dot{width:5px;height:5px;background:var(--accent);border-radius:50%}
+.headline{display:flex;align-items:flex-end;justify-content:space-between;gap:15px}.heading{font-size:57px;line-height:.97;letter-spacing:-.055em;font-weight:700;margin:0;display:flex;flex-direction:column;gap:3px}.heading span{display:block}
+.title-side{display:flex;flex-direction:column;align-items:flex-end;gap:13px;padding-bottom:4px}.title-cn{font-family:ArchiveChinese,sans-serif;font-size:22px;letter-spacing:.06em}.taxon{font-size:11px;font-family:ArchiveMono,monospace;letter-spacing:.08em;color:var(--muted)}
+.header-rule,.bottom-rule{height:1px;width:100%;background:var(--rule);transform-origin:left center}
+.hero-area{position:relative;flex:1;min-height:0}.specimen-window{position:absolute;left:268px;top:-3px;width:360px;height:720px;overflow:visible;pointer-events:none}.specimen{position:absolute;inset:0;opacity:0;transform-origin:50% 94%;will-change:transform,opacity}.sprite{width:100%;height:100%;background-image:url('assets/atlas.png');background-size:@@BG_SIZE@@;background-repeat:no-repeat}
+.hud-card{position:absolute;left:0;top:45px;width:178px;height:160px;padding:17px 17px 13px;display:flex;flex-direction:column;gap:9px}.hud-brackets{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}.hud-brackets path{stroke:var(--muted);stroke-width:1;fill:none}.card-id{font-family:ArchiveMono,monospace;font-size:40px;line-height:1;letter-spacing:-.06em;color:var(--cold)}.card-cn{font-family:ArchiveChinese,sans-serif;font-size:25px;letter-spacing:.08em;line-height:1.25}.card-en{font-family:ArchiveMono,monospace;font-size:10px;letter-spacing:.18em;color:var(--muted)}.card-footer{display:flex;gap:7px;align-items:center;font-family:ArchiveMono,monospace;font-size:10px;letter-spacing:.09em;color:var(--muted);margin-top:3px}.card-tick{height:3px;width:19px;background:var(--accent)}
+.readout{position:absolute;left:0;width:164px;display:flex;flex-direction:column;gap:7px}.size-readout{top:271px}.structure-readout{top:507px}.read-label{font-family:ArchiveMono,monospace;font-size:11px;letter-spacing:.14em;color:var(--muted)}.read-main{display:flex;align-items:baseline;gap:9px}.read-value{font-family:ArchiveMono,monospace;font-size:43px;line-height:1.08;letter-spacing:-.065em;font-variant-numeric:tabular-nums}.read-unit{font-family:ArchiveMono,monospace;font-size:10px;color:var(--muted)}.read-track{height:2px;width:118px;background:var(--rule);margin-top:4px}.read-fill{height:100%;width:100%;background:var(--accent);transform-origin:left center}
+.annotation{position:absolute;display:flex;flex-direction:column;gap:5px;width:116px}.annotation b{font-family:ArchiveMono,monospace;font-size:11px;letter-spacing:.07em;font-weight:400}.annotation span{font-family:ArchiveChinese,sans-serif;font-size:12px;color:var(--muted);letter-spacing:.05em}.rostrum{left:0;top:414px}.dorsal{right:0;top:323px;align-items:flex-end}.tail{right:0;top:610px;align-items:flex-end}.anno-num{color:var(--accent);font-size:10px!important;font-family:ArchiveMono,monospace!important;letter-spacing:.08em!important}
+#anatomy{position:absolute;left:-52px;top:-238px;width:900px;height:1200px;pointer-events:none;overflow:visible}.leader{stroke:var(--muted);stroke-width:.85;fill:none;opacity:0}.anchor{fill:var(--bg);stroke:var(--ink);stroke-width:1;opacity:0}.axis{stroke:var(--rule);stroke-width:.7;fill:none}.axis-label{position:absolute;left:644px;top:24px;color:var(--muted);font-family:ArchiveMono,monospace;font-size:10px;letter-spacing:.1em;writing-mode:vertical-rl}.growth-index{position:absolute;right:0;top:40px;display:flex;flex-direction:column;align-items:flex-end;gap:7px}.growth-index span{font-size:10px;letter-spacing:.15em;color:var(--muted);font-family:ArchiveMono,monospace}.growth-index strong{font-weight:400;font-size:21px;font-family:ArchiveMono,monospace;color:var(--cold)}
+.sequence{height:190px;flex-shrink:0;position:relative;display:flex;flex-direction:column;justify-content:space-between}.sequence-top{display:flex;justify-content:space-between;font-family:ArchiveMono,monospace;color:var(--muted);font-size:10px;letter-spacing:.13em;margin-top:12px}.mini-row{display:flex;justify-content:space-between;align-items:flex-end;height:127px}.mini-step{width:136px;height:127px;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.33}.mini-image{width:54px;height:108px;position:relative;overflow:hidden}.mini-image .sprite{position:absolute;inset:0;transform-origin:50% 95%}.mini-bottom{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;height:16px}.mini-id{font-family:ArchiveMono,monospace;font-size:11px;letter-spacing:.08em}.mini-cn{font-size:12px;letter-spacing:.06em;font-family:ArchiveChinese,sans-serif}.timeline-track{height:1px;background:var(--rule);width:100%;position:relative}.timeline-fill{position:absolute;inset:0;background:var(--accent);transform-origin:left center}.timeline-nodes{position:absolute;inset:-3px 0 0;display:flex;justify-content:space-around}.node{height:7px;width:7px;background:var(--bg);border:1px solid var(--muted);border-radius:50%;display:block}
+.footer{height:31px;flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;font-family:ArchiveMono,ArchiveChinese,monospace;font-size:10px;letter-spacing:.065em;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="stage" data-composition-id="@@ID@@" data-start="0" data-duration="@@DURATION@@" data-fps="@@FPS@@" data-width="@@WIDTH@@" data-height="@@HEIGHT@@">
+<section id="archive-clip" class="clip" data-start="0" data-duration="@@DURATION@@" data-track-index="0">
+<div id="design" style="position:absolute;width:900px;height:1200px;transform:scale(@@SCALE@@);transform-origin:top left"><div class="backdrop" data-layout-ignore></div><div class="grid" data-layout-ignore></div>
+<div class="frame-content">
+<header class="header" id="header">
+<div class="meta"><div class="meta-left"><i class="live-dot"></i><span>SPECIMEN DATA / 001</span></div><span id="archive-name"></span></div>
+<div class="headline"><h1 class="heading" id="title-lines"></h1><div class="title-side"><div class="title-cn" id="title-zh"></div><div class="taxon" id="taxon"></div></div></div>
+<div class="header-rule"></div>
+</header>
+<main class="hero-area" id="hero-area">
+<canvas id="morph-canvas" width="900" height="1200" style="position:absolute;left:-52px;top:-238px;width:900px;height:1200px;pointer-events:none" data-layout-ignore></canvas>
+<div class="hud-card" id="hud-card">
+<svg class="hud-brackets" viewBox="0 0 178 160" aria-hidden="true"><path d="M23 0H0V23"/><path d="M155 0H178V23"/><path d="M0 137V160H23"/><path d="M155 160H178V137"/></svg>
+<div class="card-id" id="card-id">S01</div><div class="card-cn" id="card-cn"></div><div class="card-en" id="card-en"></div><div class="card-footer"><i class="card-tick"></i><span id="card-count">01 / 05</span></div>
+</div>
+<div class="growth-index" id="growth-index"><span>DEVELOPMENT</span><strong id="percent">000%</strong></div>
+<div class="readout size-readout" id="size-readout"><div class="read-label" id="metric-label-0"></div><div class="read-main"><span class="read-value" id="size-value">0.00</span><span class="read-unit"></span></div><div class="read-track"><div class="read-fill" id="size-fill"></div></div></div>
+<div class="readout structure-readout" id="structure-readout"><div class="read-label" id="metric-label-1"></div><div class="read-main"><span class="read-value" id="structure-value">0.00</span><span class="read-unit"></span></div><div class="read-track"><div class="read-fill" id="structure-fill"></div></div></div>
+<div id="annotation-labels"></div>
+<svg id="anatomy" viewBox="0 0 900 1200" aria-hidden="true" data-layout-ignore>
+<path class="axis" d="M705 280V945M699 280H711M699 945H711M701 375H709M701 470H709M701 565H709M701 660H709M701 755H709M701 850H709"/>
+
+
+</svg>
+<div class="axis-label" data-layout-ignore>RELATIVE FORM / NORMALIZED VIEW</div>
+</main>
+<section class="sequence" id="sequence"><div class="bottom-rule"></div><div class="sequence-top"><span>GROWTH SEQUENCE</span><span id="sequence-count">01 — 05</span></div><div class="mini-row" id="mini-row"></div><div class="timeline-track"><div class="timeline-fill" id="timeline-fill"></div><div class="timeline-nodes" id="timeline-nodes" data-layout-allow-overflow></div></div></section>
+<footer class="footer" id="footer"><span id="footer-en"></span><span id="footer-zh"></span></footer>
+</div>
+</div>
+</section>
+</div>
+<script>
+@@CONFIG_SCRIPT@@
+@@RUNTIME@@
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+*.png binary
+*.mp4 binary
+*.woff2 binary
+*.py text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.md text eol=lf
+*.html text eol=lf
